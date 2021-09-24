@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.mapper.CategoryMapper;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -22,6 +23,12 @@ public class CategoryService {
 	@Transactional(readOnly = true)
 	public Page<CategoryDTO> findAll(Pageable pageable) {
 		return categoryRepository.findAll(pageable).map(cat -> categoryMapper.toDto(cat));
+	}
+	
+	@Transactional(readOnly = true)
+	public CategoryDTO findById(Long id) {
+		return categoryMapper.toDto(categoryRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Category not found for id: " + id))); 
 	}
 
 }
