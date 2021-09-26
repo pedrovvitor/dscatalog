@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +27,14 @@ public class CategoryService {
 	CategoryMapper categoryMapper;
 
 	@Transactional(readOnly = true)
-	public Page<CategoryDTO> findAll(Pageable pageable) {
-		return categoryRepository.findAll(pageable).map(cat -> categoryMapper.toDto(cat));
+	public Page<CategoryDTO> findAll(PageRequest pageRequest) {
+		return categoryRepository.findAll(pageRequest).map(cat -> categoryMapper.toDto(cat));
 	}
-	
+
 	@Transactional(readOnly = true)
 	public CategoryDTO findById(Long id) {
 		return categoryMapper.toDto(categoryRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Category not found! Id = " + id))); 
+				.orElseThrow(() -> new ResourceNotFoundException("Category not found! Id = " + id)));
 	}
 
 	@Transactional
@@ -47,32 +47,29 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
-			Category obj;
-			try {
-				obj = categoryRepository.getOne(id);
-				obj.setName(dto.getName());
-				obj = categoryRepository.save((obj));
-			} catch (EntityNotFoundException e) {
-				throw new ResourceNotFoundException("Category not found! Id = " + id);
-			}
+		Category obj;
+		try {
+			obj = categoryRepository.getOne(id);
+			obj.setName(dto.getName());
+			obj = categoryRepository.save((obj));
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Category not found! Id = " + id);
+		}
 		return categoryMapper.toDto(obj);
 	}
 
 	public void delete(Long id) {
 		try {
-		categoryRepository.deleteById(id);
-		}
-		catch(EmptyResultDataAccessException e) {
+			categoryRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException("Category not found! Id = " + id);
 		}
 		/*
 		 * Garante integridade referencial do banco
 		 */
-		catch(DataIntegrityViolationException e) {
+		catch (DataIntegrityViolationException e) {
 			throw new DatabaseException("Integrity violation");
 		}
 	}
-	
-	
 
 }
