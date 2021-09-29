@@ -26,7 +26,7 @@ import com.devsuperior.dscatalog.services.ProductService;
 public class ProductResource {
 
 	@Autowired
-	ProductService productService;
+	private ProductService productService;
 
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,

@@ -24,7 +24,7 @@ public class CategoryService {
 	private CategoryRepository categoryRepository;
 
 	@Autowired
-	CategoryMapper categoryMapper;
+	private CategoryMapper categoryMapper;
 
 	@Transactional(readOnly = true)
 	public Page<CategoryDTO> findAll(PageRequest pageRequest) {

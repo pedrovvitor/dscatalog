@@ -26,7 +26,7 @@ import com.devsuperior.dscatalog.services.CategoryService;
 public class CategoryResource {
 
 	@Autowired
-	CategoryService categoryService;
+	private CategoryService categoryService;
 
 	@GetMapping
 	public ResponseEntity<Page<CategoryDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
