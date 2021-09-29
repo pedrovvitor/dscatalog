@@ -47,15 +47,15 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
-		Category obj;
 		try {
+			Category obj;
 			obj = categoryRepository.getOne(id);
 			obj.setName(dto.getName());
 			obj = categoryRepository.save((obj));
+			return categoryMapper.toDto(obj);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Category not found! Id = " + id);
 		}
-		return categoryMapper.toDto(obj);
 	}
 
 	public void delete(Long id) {

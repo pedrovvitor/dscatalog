@@ -5,12 +5,16 @@ import org.springframework.stereotype.Component;
 
 import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.entities.Product;
+import com.devsuperior.dscatalog.repositories.CategoryRepository;
 
 @Component
 public class ProductMapper {
 
 	@Autowired
 	CategoryMapper categoryMapper;
+
+	@Autowired
+	CategoryRepository categoryRepository;
 
 	public ProductDTO toDto(Product entity) {
 		ProductDTO dto = new ProductDTO();
@@ -43,6 +47,18 @@ public class ProductMapper {
 		entity.setPrice(dto.getPrice());
 		entity.setImgUrl(dto.getImgUrl());
 		entity.setDate(dto.getDate());
+		return entity;
+	}
+
+	public Product copyDtoToEntity(ProductDTO dto, Product entity) {
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setPrice(dto.getPrice());
+		entity.setImgUrl(dto.getImgUrl());
+		entity.setDate(dto.getDate());
+
+		entity.getCategories().clear();
+		dto.getCategories().forEach(cat -> entity.getCategories().add(categoryRepository.getOne(cat.getId())));
 		return entity;
 	}
 }
