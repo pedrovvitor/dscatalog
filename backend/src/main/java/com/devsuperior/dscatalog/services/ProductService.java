@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +23,7 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
-	
+
 	@Autowired
 	private ProductBusinessRule productBusinessRule;
 
@@ -31,8 +31,8 @@ public class ProductService {
 	private ProductMapper productMapper;
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAll(PageRequest pageRequest) {
-		return productRepository.findAll(pageRequest).map(cat -> productMapper.toDto(cat));
+	public Page<ProductDTO> findAll(Pageable pageable) {
+		return productRepository.findAll(pageable).map(cat -> productMapper.toDto(cat));
 	}
 
 	@Transactional(readOnly = true)
@@ -49,8 +49,8 @@ public class ProductService {
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
 		try {
-			return productMapper
-					.toDto(productRepository.save(productBusinessRule.copyDtoToEntity(dto, productRepository.getOne(id))));
+			return productMapper.toDto(
+					productRepository.save(productBusinessRule.copyDtoToEntity(dto, productRepository.getOne(id))));
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Product not found! Id = " + id);
 		}
