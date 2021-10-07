@@ -10,40 +10,53 @@ import com.devsuperior.dscatalog.entities.Product;
 public class ProductMapper {
 
 	@Autowired
-	private CategoryMapper categoryMapper;
+	CategoryMapper categoryMapper;
 
 	public ProductDTO toDto(Product entity) {
-		ProductDTO dto = new ProductDTO();
-		dto.setId(entity.getId());
-		dto.setName(entity.getName());
-		dto.setDescription(entity.getDescription());
-		dto.setPrice(entity.getPrice());
-		dto.setImgUrl(entity.getImgUrl());
-		dto.setDate(entity.getDate());
-		return dto;
+		return ProductDTO.builder().id(entity.getId()).name(entity.getName()).description(entity.getDescription())
+				.price(entity.getPrice()).imgUrl(entity.getImgUrl()).date(entity.getDate()).build();
 	}
 
 	public ProductDTO toDtoWithCategories(Product entity) {
-		ProductDTO dto = new ProductDTO();
-		dto.setId(entity.getId());
-		dto.setName(entity.getName());
-		dto.setDescription(entity.getDescription());
-		dto.setPrice(entity.getPrice());
-		dto.setImgUrl(entity.getImgUrl());
-		dto.setDate(entity.getDate());
-		entity.getCategories().forEach(cat -> dto.getCategories().add(categoryMapper.toDto(cat)));
+		ProductDTO dto = ProductDTO.builder()
+				.id(entity.getId())
+				.name(entity.getName())
+				.description(entity.getDescription())
+				.price(entity.getPrice())
+				.imgUrl(entity.getImgUrl())
+				.date(entity.getDate())
+				.build();
+		dto.getCategories().clear();
+		entity.getCategories()
+		.forEach(cat -> dto.getCategories()
+				.add(categoryMapper.toDto(cat)));
 		return dto;
 	}
 
 	public Product toEntity(ProductDTO dto) {
-		Product entity = new Product();
-		entity.setId(dto.getId());
-		entity.setName(dto.getName());
-		entity.setDescription(dto.getDescription());
-		entity.setPrice(dto.getPrice());
-		entity.setImgUrl(dto.getImgUrl());
-		entity.setDate(dto.getDate());
-		return entity;
+		return Product.builder()
+				.id(dto.getId())
+				.name(dto.getName())
+				.description(dto.getDescription())
+				.price(dto.getPrice())
+				.imgUrl(dto.getImgUrl())
+				.date(dto.getDate())
+				.build();
+	}
+	public Product toEntityWithCategories(ProductDTO dto) {
+		Product product =  Product.builder()
+				.id(dto.getId())
+				.name(dto.getName())
+				.description(dto.getDescription())
+				.price(dto.getPrice())
+				.imgUrl(dto.getImgUrl())
+				.date(dto.getDate())
+				.build();
+		product.getCategories().clear();
+		dto.getCategories().forEach(cat -> product
+				.getCategories()
+				.add(categoryMapper.toEntity(cat)));
+		 return product;
 	}
 
 }

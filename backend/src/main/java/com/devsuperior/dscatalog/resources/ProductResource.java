@@ -28,7 +28,6 @@ public class ProductResource {
 
 	@GetMapping
 	// PARAMETROS: page, size, sort
-
 	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
 		return ResponseEntity.ok(productService.findAll(pageable));
 	}
@@ -55,5 +54,4 @@ public class ProductResource {
 		productService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-
 }

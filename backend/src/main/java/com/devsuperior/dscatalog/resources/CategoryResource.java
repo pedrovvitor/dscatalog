@@ -27,9 +27,7 @@ public class CategoryResource {
 	private CategoryService categoryService;
 
 	@GetMapping
-	
 	// PARAMETROS: page, size, sort
-	
 	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable) {
 		return ResponseEntity.ok(categoryService.findAll(pageable));
 	}

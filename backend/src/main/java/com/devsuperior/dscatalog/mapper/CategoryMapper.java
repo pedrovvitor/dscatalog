@@ -9,11 +9,11 @@ import com.devsuperior.dscatalog.entities.Category;
 public class CategoryMapper {
 
 	public CategoryDTO toDto(Category entity) {
-		return new CategoryDTO(entity.getId(), entity.getName());
+		return  CategoryDTO.builder().id(entity.getId()).name(entity.getName()).build();
 	}
 	
 	public Category toEntity(CategoryDTO dto) {
-		return new Category(dto.getId(), dto.getName());
+		return Category.builder().id(dto.getId()).name(dto.getName()).build();
 	}
 
 }

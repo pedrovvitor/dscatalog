@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devsuperior.dscatalog.businessrule.ProductBusinessRule;
 import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.entities.Product;
 import com.devsuperior.dscatalog.mapper.ProductMapper;
@@ -23,9 +22,6 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
-
-	@Autowired
-	private ProductBusinessRule productBusinessRule;
 
 	@Autowired
 	private ProductMapper productMapper;
@@ -43,14 +39,15 @@ public class ProductService {
 
 	@Transactional
 	public ProductDTO insert(ProductDTO dto) {
-		return productMapper.toDto(productRepository.save(productBusinessRule.copyDtoToEntity(dto, new Product())));
+		return productMapper.toDto(productRepository.save(productMapper.toEntity(dto)));
 	}
 
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
 		try {
-			return productMapper.toDto(
-					productRepository.save(productBusinessRule.copyDtoToEntity(dto, productRepository.getOne(id))));
+			Product product = productRepository.getOne(id);
+			dto.setId(product.getId());
+			return productMapper.toDto(productRepository.save(productMapper.toEntityWithCategories(dto)));
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Product not found! Id = " + id);
 		}
