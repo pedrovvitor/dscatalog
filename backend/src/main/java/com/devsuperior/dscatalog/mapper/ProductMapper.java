@@ -13,8 +13,14 @@ public class ProductMapper {
 	CategoryMapper categoryMapper;
 
 	public ProductDTO toDto(Product entity) {
-		return ProductDTO.builder().id(entity.getId()).name(entity.getName()).description(entity.getDescription())
-				.price(entity.getPrice()).imgUrl(entity.getImgUrl()).date(entity.getDate()).build();
+		ProductDTO dto = ProductDTO.builder()
+				.id(entity.getId())
+				.name(entity.getName())
+				.description(entity.getDescription())
+				.price(entity.getPrice())
+				.imgUrl(entity.getImgUrl())
+				.date(entity.getDate()).build();
+		return dto;
 	}
 
 	public ProductDTO toDtoWithCategories(Product entity) {
@@ -34,7 +40,7 @@ public class ProductMapper {
 	}
 
 	public Product toEntity(ProductDTO dto) {
-		return Product.builder()
+		Product product = Product.builder()
 				.id(dto.getId())
 				.name(dto.getName())
 				.description(dto.getDescription())
@@ -42,6 +48,7 @@ public class ProductMapper {
 				.imgUrl(dto.getImgUrl())
 				.date(dto.getDate())
 				.build();
+		return product;
 	}
 	public Product toEntityWithCategories(ProductDTO dto) {
 		Product product =  Product.builder()

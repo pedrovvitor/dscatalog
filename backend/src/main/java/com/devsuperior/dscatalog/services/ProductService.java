@@ -28,7 +28,7 @@ public class ProductService {
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAll(Pageable pageable) {
-		return productRepository.findAll(pageable).map(cat -> productMapper.toDto(cat));
+		return productRepository.findAll(pageable).map(product -> productMapper.toDto(product));
 	}
 
 	@Transactional(readOnly = true)
