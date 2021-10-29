@@ -77,11 +77,11 @@ public class ProductServiceTest {
 		Mockito.when(productRepository.findById(existingId)).thenReturn(Optional.of(product));
 		Mockito.when(productRepository.findById(nonExistingId)).thenReturn(Optional.empty());
 
-		Mockito.when(productRepository.getOne(existingId)).thenReturn(product);
-		Mockito.when(productRepository.getOne(nonExistingId)).thenThrow(EntityNotFoundException.class);
+		Mockito.when(productRepository.findById(existingId)).thenReturn(Optional.of(product));
+		Mockito.when(productRepository.findById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 
-		Mockito.when(categoryRepository.getOne(existingId)).thenReturn(category);
-		Mockito.when(categoryRepository.getOne(nonExistingId)).thenThrow(EntityNotFoundException.class);
+		Mockito.when(categoryRepository.findById(existingId)).thenReturn(Optional.of(category));
+		Mockito.when(categoryRepository.findById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 
 		Mockito.when(productRepository.save(ArgumentMatchers.any())).thenReturn(product);
 		
@@ -103,7 +103,7 @@ public class ProductServiceTest {
 			productService.findById(existingId);
 		});
 
-		Mockito.verify(productRepository, Mockito.times(1)).findById(existingId);
+		Mockito.verify(productRepository, Mockito.times(2)).findById(existingId);
 	}
 
 	@Test

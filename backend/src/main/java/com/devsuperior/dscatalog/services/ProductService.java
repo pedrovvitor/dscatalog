@@ -1,7 +1,5 @@
 package com.devsuperior.dscatalog.services;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,13 +42,13 @@ public class ProductService {
 
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
-		try {
-			Product product = productRepository.getOne(id);
+			Product product = productRepository.findById(id).orElseThrow(() ->
+			new ResourceNotFoundException("Product not found! Id = " + id));
 			dto.setId(product.getId());
-			return productMapper.toDto(productRepository.save(productMapper.toEntityWithCategories(dto)));
-		} catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Product not found! Id = " + id);
-		}
+			return productMapper
+					.toDto(productRepository
+							.save(productMapper
+									.toEntityWithCategories(dto)));
 	}
 
 	public void delete(Long id) {
@@ -59,9 +57,6 @@ public class ProductService {
 		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException("Product not found! Id = " + id);
 		}
-		/*
-		 * Garante integridade referencial do banco
-		 */
 		catch (DataIntegrityViolationException e) {
 			throw new DatabaseException("Integrity violation");
 		}

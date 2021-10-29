@@ -1,7 +1,5 @@
 package com.devsuperior.dscatalog.services;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,14 +42,11 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
-		try {
-			Category obj = categoryRepository.getOne(id);
+			Category obj = categoryRepository.findById(id).orElseThrow(() ->
+			new ResourceNotFoundException("Category not found! Id = " + id));
 			obj.setName(dto.getName());
 			obj = categoryRepository.save((obj));
 			return categoryMapper.toDto(obj);
-		} catch (EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Category not found! Id = " + id);
-		}
 	}
 
 	public void delete(Long id) {

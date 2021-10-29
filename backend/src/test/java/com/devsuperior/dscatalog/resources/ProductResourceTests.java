@@ -81,7 +81,8 @@ public class ProductResourceTests {
 	@Test
 	public void deleteShouldDeleteResourceWhenIdExists() throws Exception {
 		
-		ResultActions result = mockMvc.perform(delete("/products/{id}", existingId));
+		ResultActions result = mockMvc.perform(delete("/products/{id}", existingId)
+				.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isNoContent());
 	}
@@ -89,7 +90,8 @@ public class ProductResourceTests {
 	@Test
 	public void deleteShouldThrowResourceNotFoundException() throws Exception {
 		
-		ResultActions result = mockMvc.perform(delete("/products/{id}", nonExistingId));
+		ResultActions result = mockMvc.perform(delete("/products/{id}", existingId)
+				.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isNotFound());
 	}
@@ -111,7 +113,7 @@ public class ProductResourceTests {
 	}
 	
 	@Test
-	public void UpdateShouldReturnProductDTOWhenIdExists() throws Exception {
+	public void updateShouldReturnProductDTOWhenIdExists() throws Exception {
 		
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
@@ -128,7 +130,7 @@ public class ProductResourceTests {
 	
 	
 	@Test
-	public void UpdateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
+	public void updateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
 		
 	String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
