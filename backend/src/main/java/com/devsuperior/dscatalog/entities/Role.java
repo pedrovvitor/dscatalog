@@ -41,7 +41,4 @@ public @Data class Role implements Serializable{
 		}
 		return users;
 	}
-	
-	
-	
 }

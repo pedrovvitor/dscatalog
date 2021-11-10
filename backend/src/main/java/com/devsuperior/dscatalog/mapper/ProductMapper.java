@@ -19,7 +19,8 @@ public class ProductMapper {
 				.description(entity.getDescription())
 				.price(entity.getPrice())
 				.imgUrl(entity.getImgUrl())
-				.date(entity.getDate()).build();
+				.date(entity.getDate())
+				.build();
 		return dto;
 	}
 
